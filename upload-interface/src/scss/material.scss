@@ -1,0 +1,126 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+
+@import './variables';
+
+// @import "node_modules/@angular/material/theming";
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+
+$app-green: (
+  50: #f0fcf4,
+  100: #d8f6e5,
+  200: #bff1d3,
+  300: #a5ebc1,
+  400: #91e6b4,
+  500: $primary-color,
+  600: #76df9f,
+  700: #6bda96,
+  800: #61d68c,
+  900: #4ecf7c,
+  A100: #ffffff,
+  A200: #f8fffa,
+  A400: #c5ffd9,
+  A700: #acffc8,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #000000,
+    600: #000000,
+    700: #000000,
+    800: #000000,
+    900: #000000,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);
+
+$app-green-accent: (
+  50: #e4f4eb,
+  100: #bce4cc,
+  200: #8fd3ab,
+  300: #62c189,
+  400: #41b36f,
+  500: $accent-color,
+  600: #1b9e4f,
+  700: #179545,
+  800: #128b3c,
+  900: #0a7b2b,
+  A100: #abffc0,
+  A200: #78ff99,
+  A400: #45ff73,
+  A700: #2bff60,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);
+$angular-primary: mat.define-palette($app-green);
+$angular-accent: mat.define-palette($app-green-accent);
+
+// The warn palette is optional (defaults to red).
+$angular-warn: mat.define-palette(mat.$red-palette);
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+$custom-typography: mat.define-typography-config(
+  $font-family: $font-family,
+);
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$lumia-ui-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $angular-primary,
+      accent: $angular-accent,
+      warn: $angular-warn,
+    ),
+    typography: $custom-typography,
+    density: -2,
+  )
+);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($lumia-ui-theme);
+
+.mat-mdc-table {
+  .mdc-data-table__row {
+    height: 34px;
+  }
+  .mat-mdc-cell,
+  .mat-mdc-header-cell {
+    vertical-align: middle;
+  }
+}
+.mat-mdc-paginator {
+  margin-top: 5px;
+}

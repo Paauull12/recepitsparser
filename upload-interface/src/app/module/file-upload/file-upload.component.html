@@ -1,0 +1,43 @@
+<!-- Drag-and-drop and browse system for file container  -->
+<div
+  class="container"
+  appDragNDrop
+  (fileDropped)="onFileDropped($event)"
+>
+  <div class="inner-container">
+    <span class="lds-icons big doc-scanner">document_scanner</span>
+    <h3>Drop</h3>
+    <h4>your documents in this area</h4>
+    <input
+      #dentalQuoteInput
+      hidden="true"
+      type="file"
+      onclick="this.value=''"
+      (change)="fileBrowseHandler($event)"
+      [accept]="accept"
+      [disabled]="uploading"
+    />
+    <div
+      class="choose-file"
+      (click)="dentalQuoteInput.click()"
+    >
+      <span class="green-clickable lds-icons medium">upload</span>
+      <p class="green-clickable">Upload your file</p>
+    </div>
+  </div>
+</div>
+
+<!-- progress bar -->
+<div *ngIf="uploadProgress">
+  <hr />
+  <div class="progress">
+    <div class="l-container">
+      <span class="left-align lds-icons medium">description</span>
+      <p>{{ uploadedFileName }}</p>
+    </div>
+    <mat-progress-bar
+      mode="determinate"
+      [value]="uploadProgress"
+    ></mat-progress-bar>
+  </div>
+</div>

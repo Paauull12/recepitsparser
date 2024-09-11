@@ -1,0 +1,17 @@
+<div *ngIf="file" class="image-container">
+    <h3>Uploaded Image</h3>
+    <img [src]="fileUrl()" alt="Uploaded Image" />
+    
+    <!-- Display the input box with the total text or a fallback message -->
+    <input 
+      type="text" 
+      [value]="textWithTotal || 'Nu avem nimic'" 
+      readonly 
+      class="file-name-input" 
+    />
+  </div>
+  
+  <div *ngIf="!file" class="image-container">
+    <h2>No image uploaded yet.</h2>
+  </div>
+  

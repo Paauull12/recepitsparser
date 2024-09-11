@@ -1,0 +1,79 @@
+services:
+  upload-interface:
+    build:
+      context: ./upload-interface  
+      dockerfile: Dockerfile        
+    container_name: upload-interface
+    ports:
+      - "80:80"                     
+    depends_on:
+      - storage-service
+    networks:
+      - my_network
+
+  storage-service:
+    build:
+      context: ./storage-service  
+      dockerfile: Dockerfile      
+    container_name: storage-service
+    ports:
+      - "8000:80" # host port | container port
+    depends_on:
+      - db
+      - textdetectapi
+      - minio
+    environment:
+      - DATABASE_URL=postgres://user:password@db:5432/app1_dbSS
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+      - MINIO_ENDPOINT=http://minio:9000
+    networks:
+      - my_network
+
+  textdetectapi:
+    build:
+      context: ./apiForReceiptsProcessor 
+      dockerfile: Dockerfile      
+    container_name: textdetectapi
+    ports:
+      - "7000:80"
+    networks:
+      - my_network
+
+  db:
+    image: postgres:13-alpine
+    container_name: postgres-db
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=app1_db
+      
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - my_network
+
+  minio: # for image storage
+    image: minio/minio
+    ports:
+      - "9000:9000" # S3 API port
+      - "9001:9001" # Web interface port
+    volumes:
+      - minio_data:/data
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+      MINIO_CORS_ALLOW_ORIGINS: "*"
+    command: server /data --console-address ":9001"
+    networks:
+      - my_network
+
+volumes:
+  postgres-data:
+  minio_data:
+
+networks:
+  my_network:
+    driver: bridge

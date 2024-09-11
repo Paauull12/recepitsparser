@@ -1,0 +1,3 @@
+{
+  "loginRedirect": "http://localhost:4200/api/login"
+}

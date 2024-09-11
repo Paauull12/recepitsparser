@@ -1,0 +1,13 @@
+<div class="parent-container">
+  <div class="first-child-container">
+    <h2>File upload interface</h2>
+    <app-new-file-upload
+      (uploadedDocUUID)="onUploadDone($event)"
+      (uploadedFile)="onFileUploaded($event)"
+      (textWithTotal)="onTextResponse($event)"
+    />
+  </div>
+  <div class="second-child-container">
+      <app-file-viewer [file]="uploadedFile" [textWithTotal]="textWithValue"/>
+  </div>
+</div>

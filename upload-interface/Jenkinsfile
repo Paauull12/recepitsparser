@@ -1,0 +1,84 @@
+@Library('jouve-pipeline-library') _
+
+
+
+
+pipeline {
+    options { buildDiscarder(logRotator(numToKeepStr: '5')) }
+    // every 20 minutes from monday to friday
+    // triggers { pollSCM('H/20 * * * 1-5') }
+    agent {
+        node {
+            label 'nodejs18'
+            customWorkspace "workspace/upload-interface"
+        }
+    }
+    environment {
+        CI = 'true'
+        PROJECT = 'upload-interface'
+        RD_JOB = 'deployment/deployment-angular-api'
+        VERSION = "${env.BRANCH_NAME}"
+        IS_RELEASE = false
+        REPOSITORY = 'snapshots'
+        PROFILE = "staging"
+        PACKAGE_VERSION = "0.0.1"
+    }
+    stages {
+        stage('Install') {
+            options {
+                timeout(time: 10, unit: "MINUTES")
+            }
+            steps {
+                echo "Clean previous install !!!"
+                // sh "rm -Rf node_modules"
+                echo "Do a clean npm install (ci : remove node_modules // not package-lock) !!!"
+                sh 'npm ci'
+            }
+        }
+        stage ('Release detection') {
+            options {
+                timeout(time: 2, unit: "MINUTES")
+            }
+            steps {
+                script {
+                    if (env.BRANCH_NAME == "main") {
+                        IS_RELEASE = true
+                        REPOSITORY = "releases"
+                        PROFILE = "prod" // used also for production for now
+                        getPackageJsonVersion()
+                    } else {
+                         // https://git.jouve-hdi.com/its-explog/jouve-pipeline-library/tree/master#jvextractversionfromgit
+                        jvExtractVersionFromGit()
+                        echo "Detected version: ${NEXUS_VERSION}"
+                        PACKAGE_VERSION = "${NEXUS_VERSION}"
+                        echo "Git release: ${IS_RELEASE}"
+                        echo "Git version: ${VERSION}"
+                        echo "Git version for Nexus: ${NEXUS_VERSION}"
+                        echo "Git branch name: ${BRANCH_NAME}"
+                        PROFILE = "integration"
+                    }
+                }
+                echo "Detected version: ${PACKAGE_VERSION}"
+            }
+        }
+        stage ('Build') {
+            options {
+                timeout(time: 10, unit: "MINUTES")
+            }
+            steps {
+                echo "Do build/package-frontend.sh !!!"
+                sh "build/package-frontend.sh ${VERSION} upload-interface build:${PROFILE}"
+                stashFilesForSonar(config)
+            }
+        }
+    }
+}
+
+// release 
+void getPackageJsonVersion() {
+    // get the project version with node and package.json file
+    def tag = sh(returnStdout: true, script: "node -p \"require('./package.json').version\"").replace('\n', '').trim()
+    if (tag) {
+        PACKAGE_VERSION = tag
+    }
+}

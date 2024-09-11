@@ -1,0 +1,54 @@
+/* You can add global styles to this file, and also import other style files */
+@import './scss/reset';
+@import './scss/fonts';
+@import './scss/variables';
+@import './scss/material';
+
+// html, body { height: 100%; }
+// body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html {
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+  font-family: $font-family;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior-y: none;
+  overflow: auto;
+  margin: 0;
+}
+
+a {
+  outline: none;
+  color: $accent-color;
+  &:visited,
+  &:active,
+  &:focus {
+    color: $accent-color;
+  }
+  &:hover {
+    color: $primary-color;
+  }
+}
+
+h1,
+h2 {
+  font-weight: bold;
+  margin: 16px 0 8px 0;
+}
+
+hr {
+  border-top: 1px solid $border-color;
+  border-bottom: none;
+  margin: 8px 0;
+}
+::selection {
+  color: white;
+  background: $accent-color;
+}
+
+/* You can add global styles to this file, and also import other style files */

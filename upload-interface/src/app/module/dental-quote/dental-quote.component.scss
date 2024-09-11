@@ -1,0 +1,42 @@
+.parent-container {
+  margin: 10px auto;
+  display: grid;
+  grid-template-columns: 2fr 7fr;
+  grid-gap: 30 px;
+  width: 95%;
+}
+.first-child-container {
+  margin: 20px;
+  height: 90%;
+}
+
+.loader {
+  margin: 0% 33.5% 0% 33.5%;
+  position: relative;
+  top: 50%;
+  left: 20%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+h2 {
+  text-align: center;
+}
+
+.checkbox-container {
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.checkbox-label {
+  font-size: 1.2em; /* Equivalent to h3 size */
+  text-align: center;
+}
+
+.styled-checkbox {
+  width: 1.1em;
+  height: 1.1em;
+  margin-left: 10px;
+  vertical-align: middle;
+}

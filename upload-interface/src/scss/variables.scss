@@ -1,0 +1,19 @@
+$font-family: Poppins, arial, sans-serif;
+$primary-color: #7ee2a7;
+$accent-color: #1fa656;
+$border-color: #ddd;
+$border-radius: 4px;
+
+$info-color: darkgrey;
+$valid-color: $accent-color;
+$warning-color: orange;
+$error-color: red;
+
+$header-height: 50px;
+$main-padding: 8px;
+
+@mixin border-default($padding: 8px) {
+  border: 1px solid $border-color;
+  border-radius: $border-radius;
+  padding: $padding;
+}
